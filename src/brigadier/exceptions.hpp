@@ -25,7 +25,7 @@ public:                                           \
     class name : public exception {                                        \
         POPULATE_BASIC_EXCEPTION(name, exception)                          \
         name arguments throw():                                            \
-            exception([&, this]() stringBuilder ())                           \
+            exception([&, this ]() stringBuilder())                        \
         {                                                                  \
         }                                                                  \
     }
@@ -93,7 +93,6 @@ DEFINE_EXCEPTION_FROM(CommandSyntaxException, ReaderException);
 //     return getExpectedValueMessage(reader, "a string");
 // });
 
-
 // DEFINE_EXCEPTION_FROM(InvalidValue, ReaderException);
 // DEFINE_EXCEPTION_FROM_C(InvalidBool, InvalidValue, (Reader *reader, const std::string &value), {
 //     return fmt::format("Invalid bool '{}'", value);}
@@ -118,6 +117,5 @@ DEFINE_EXCEPTION_FROM(CommandSyntaxException, ReaderException);
 // DEFINE_EXCEPTION_FROM_C(InvalidString, InvalidValue, (Reader *reader, const std::string &value), {
 //     return fmt::format("Invalid string '{}'", value);}
 // );
-
 
 } // namespace brigadier

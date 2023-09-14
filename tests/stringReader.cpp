@@ -1,24 +1,32 @@
 #include "brigadier/exceptions.hpp"
+#include <brigadier/reader/StringReader.hpp>
 #include <gtest/gtest.h>
 #include <rapidcheck/gtest.h>
-#include <brigadier/reader/StringReader.hpp>
 #include <string>
 
 class ReaderDefaults : public testing::Test {
 protected:
-    ReaderDefaults(): str("Hello World"), reader(str) {}
+    ReaderDefaults():
+        str("Hello World"),
+        reader(str)
+    {
+    }
 
 protected:
     std::string str;
     brigadier::StringReader reader;
 };
-class ReaderInt : public testing::Test {};
-class ReaderDouble : public testing::Test {};
-class ReaderFloat : public testing::Test {};
-class ReaderBool : public testing::Test {};
+class ReaderInt : public testing::Test { };
+class ReaderDouble : public testing::Test { };
+class ReaderFloat : public testing::Test { };
+class ReaderBool : public testing::Test { };
 class ReaderString : public testing::Test {
 protected:
-    ReaderString(): str("Hello World"), reader(str) {}
+    ReaderString():
+        str("Hello World"),
+        reader(str)
+    {
+    }
 
 protected:
     std::string str;
@@ -188,7 +196,10 @@ TEST_F(ReaderDouble, testNegativeDouble)
 
 TEST_F(ReaderDouble, testLimit)
 {
-    brigadier::StringReader reader4("1797693134862315708145274237317043567980705675258449965989174768031572607800285387605895586327668781715404589535143824642343213268894641827684675467035375169860499105765512820762454900903893289440758685084551339423045832369032229481658085593321233482747978262041447231687381771809192998812504040261841248583681234.12345678901234567890");
+    brigadier::StringReader reader4(
+        "17976931348623157081452742373170435679807056752584499659891747680315726078002853876058955863276687817154045895351438246423432132688946418276846754670353751698604991057655"
+        "12820762454900903893289440758685084551339423045832369032229481658085593321233482747978262041447231687381771809192998812504040261841248583681234.12345678901234567890"
+    );
     EXPECT_THROW(reader4.readDouble(), brigadier::CommandSyntaxException);
 
     // auto min = std::to_string(std::numeric_limits<double>::lowest());

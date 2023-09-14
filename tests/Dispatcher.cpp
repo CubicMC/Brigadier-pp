@@ -1,13 +1,15 @@
-#include <gtest/gtest.h>
-#include <gmock/gmock.h>
 #include <brigadier/Dispatcher.hpp>
+#include <gmock/gmock.h>
+#include <gtest/gtest.h>
 
 namespace test {
 
 class MCommand : public brigadier::CommandNode {
 public:
     MCommand(const std::string &name):
-        CommandNode(name) {}
+        CommandNode(name)
+    {
+    }
     MOCK_METHOD(void, execute, (), (override));
     MOCK_METHOD(void, help, (), (override));
     MOCK_METHOD(void, usage, (), (override));

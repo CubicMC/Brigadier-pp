@@ -5,18 +5,14 @@
 
 using namespace brigadier;
 
-static std::string makeExpectedValueMessage(Reader *reader, const std::string &expected) {
-    return fmt::format("Expected {} whilst reading {}", expected, reader->getString());
-}
+static std::string makeExpectedValueMessage(Reader *reader, const std::string &expected) { return fmt::format("Expected {} whilst reading {}", expected, reader->getString()); }
 
-static std::string makeInvalidValueMessage(Reader *reader, const std::string &value, const std::string &expected) {
+static std::string makeInvalidValueMessage(Reader *reader, const std::string &value, const std::string &expected)
+{
     return fmt::format("Invalid {} '{}' whilst reading {}", expected, value, reader->getString());
 }
 
-bool Reader::readBool()
-{
-    return this->readString() == "true";
-}
+bool Reader::readBool() { return this->readString() == "true"; }
 
 int Reader::readInt()
 {

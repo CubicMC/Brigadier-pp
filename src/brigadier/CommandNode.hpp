@@ -7,7 +7,9 @@ namespace brigadier {
 class CommandNode {
 public:
     CommandNode(const std::string &name):
-        _name(name) {}
+        _name(name)
+    {
+    }
     virtual ~CommandNode() = default;
 
     virtual void help() = 0;

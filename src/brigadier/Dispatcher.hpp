@@ -71,7 +71,7 @@ public:
         auto begin = input.begin();
 
         for (auto it = std::find_first_of(input.begin(), input.end(), COMMAND_SEPARATOR.begin(), COMMAND_SEPARATOR.end()); it != input.end();
-            begin = it, it = std::find_first_of(input.begin(), input.end(), COMMAND_SEPARATOR.begin(), COMMAND_SEPARATOR.end())) {
+             begin = it, it = std::find_first_of(input.begin(), input.end(), COMMAND_SEPARATOR.begin(), COMMAND_SEPARATOR.end())) {
             arguments.emplace_back(std::string(&*begin, std::distance(begin, it)));
         }
 
