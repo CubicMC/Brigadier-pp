@@ -7,16 +7,22 @@
 namespace brigadier {
 class Argument {
 public:
-    Argument() = default;
+    Argument(const std::string &name, const std::string &description = "", bool required = false, bool greedy = false):
+        _name(name),
+        _description(description),
+        _required(required),
+        _greedy(greedy)
+    {
+    }
+    virtual ~Argument() = default;
 
-    /**
-     * @brief
-     *
-     * @throw exception-object exception description
-     *
-     * @param arg
-     * @return uint8_t
-     */
-    virtual void parse(Reader &reader) = 0;
+    virtual std::string help() const = 0;
+    virtual std::string usage() const = 0;
+
+protected:
+    const std::string _name;
+    const std::string _description;
+    const bool _required;
+    const bool _greedy;
 };
-}
+} // namespace brigadier

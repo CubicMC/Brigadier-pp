@@ -13,10 +13,7 @@ public:
     virtual ~CommandNode() = default;
 
     virtual void help() = 0;
-    virtual void usage() = 0;
-    virtual void execute() = 0;
-
-    // Command& addSubcommand();
+    // virtual void usage() = 0;
 
 protected:
     const std::string _name;

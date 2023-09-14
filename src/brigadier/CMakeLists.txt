@@ -7,5 +7,5 @@ target_sources(Brigadier
         exceptions.hpp
 )
 
-add_subdirectory(arguments)
+add_subdirectory(parser)
 add_subdirectory(reader)
