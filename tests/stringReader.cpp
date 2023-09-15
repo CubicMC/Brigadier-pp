@@ -1,6 +1,9 @@
-#include "brigadier/exceptions.hpp"
+#include <brigadier/exceptions.hpp>
+#include <rapidcheck/Random.h>
+#include <rapidcheck/gen/Arbitrary.h>
 #include <brigadier/reader/StringReader.hpp>
 #include <gtest/gtest.h>
+#include <limits>
 #include <rapidcheck/gtest.h>
 #include <string>
 
@@ -277,4 +280,28 @@ RC_GTEST_FIXTURE_PROP(ReaderBool, testReadBool, (bool value))
 {
     brigadier::StringReader reader(value ? "true" : "false");
     RC_ASSERT(reader.readBool() == value);
+}
+
+TEST_F(ReaderFloat, testReadFloat)
+{
+    auto elms = rc::gen::arbitrary<std::vector<float>>().as("elements");
+    auto prop = [](const std::vector<float> &elements) {
+        for (auto &element : elements) {
+            brigadier::StringReader reader(std::to_string(element));
+            RC_ASSERT(reader.readFloat() == element);
+        }
+    };
+    rc::check(prop);
+}
+
+TEST_F(ReaderDouble, testReadDouble)
+{
+    auto elms = rc::gen::arbitrary<std::vector<double>>().as("elements");
+    auto prop = [](const std::vector<double> &elements) {
+        for (auto &element : elements) {
+            brigadier::StringReader reader(std::to_string(element));
+            RC_ASSERT(reader.readDouble() == element);
+        }
+    };
+    rc::check(prop);
 }

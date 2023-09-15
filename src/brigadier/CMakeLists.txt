@@ -1,11 +1,13 @@
 target_sources(Brigadier
     PRIVATE
-        CommandNode.cpp
+        # CommandNode.cpp
     PUBLIC
         CommandNode.hpp
+        Argument.hpp
+        Command.hpp
         Dispatcher.hpp
         exceptions.hpp
 )
 
-add_subdirectory(parser)
 add_subdirectory(reader)
+add_subdirectory(parser)

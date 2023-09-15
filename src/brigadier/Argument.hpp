@@ -1,6 +1,6 @@
 #pragma once
 
-#include "brigadier/reader/Reader.hpp"
+#include <brigadier/reader/Reader.hpp>
 #include <cstdint>
 #include <string>
 

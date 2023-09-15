@@ -1,7 +1,7 @@
 #pragma once
 
 #include <brigadier/CommandNode.hpp>
-#include <brigadier/argument.hpp>
+#include <brigadier/Argument.hpp>
 #include <brigadier/reader/Reader.hpp>
 #include <type_traits>
 #include <utility>
