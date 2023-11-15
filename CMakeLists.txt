@@ -43,12 +43,12 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(fmt)
 
-add_library(Brigadier++)
-add_library(Brigadier++::Brigadier++ ALIAS Brigadier++)
-target_compile_options(Brigadier++ PUBLIC -DENABLE_TESTING -ggdb3)
+add_library(${PROJECT_NAME})
+add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
+target_compile_options(${PROJECT_NAME} PUBLIC -DENABLE_TESTING -ggdb3)
 
-target_link_libraries(Brigadier++ PUBLIC fmt::fmt)
+target_link_libraries(${PROJECT_NAME} PUBLIC fmt::fmt)
 
-target_include_directories(Brigadier++ PUBLIC src)
+target_include_directories(${PROJECT_NAME} PUBLIC src)
 
 add_subdirectory(src)
