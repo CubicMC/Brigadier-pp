@@ -19,4 +19,3 @@ target_link_libraries(tests PRIVATE
 target_link_directories(tests PRIVATE ${CMAKE_BINARY_DIR}/lib)
 
 gtest_discover_tests(tests)
-add_test(tests)
