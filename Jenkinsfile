@@ -10,7 +10,7 @@ pipeline {
             parallel {
                 stage('GNU/Linux') {
                     agent {
-                        label "cubic-gnu"
+                        label "brigadier++-gnu"
                     }
                     options {
                         timeout(time: 20, unit: 'MINUTES')
@@ -21,9 +21,9 @@ pipeline {
                                 sh '''
                                 mkdir -pv build
                                 cd build
-                                CC=gcc CXX=g++ cmake -DCMAKE_BUILD_TYPE=Release -DGTEST=1 ..
+                                CC=gcc CXX=g++ cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=1 ..
                                 make -j4
-                                cp CubicServer CubicServer_x86-64_GNULinux_dev
+                                cp libbrigadier++.a libbrigadier++_x86-64_GNULinux_dev.a
                                 '''
                             }
                         }
@@ -39,7 +39,7 @@ pipeline {
                     post {
                         always {
                             archiveArtifacts (
-                                artifacts: 'build/Testing/**/*.xml, build/CubicServer_x86-64_GNULinux_dev',
+                                artifacts: 'build/Testing/**/*.xml, build/libbrigadier++_x86-64_GNULinux_dev.a',
                                 allowEmptyArchive: true,
                                 fingerprint: true
                             )
@@ -77,9 +77,9 @@ pipeline {
                                 sh '''
                                 mkdir -pv build
                                 cd build
-                                CC=gcc CXX=g++ cmake -DCMAKE_BUILD_TYPE=Release -DGTEST=1 ..
+                                CC=gcc CXX=g++ cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=1 ..
                                 make -j4
-                                cp CubicServer CubicServer_x86-64_FreeBSD_dev
+                                cp libbrigadier++.a libbrigadier++_x86-64_GNULinux_dev.a
                                 '''
                             }
                         }
@@ -95,7 +95,7 @@ pipeline {
                     post {
                         always {
                             archiveArtifacts (
-                                artifacts: 'build/Testing/**/*.xml, build/CubicServer_x86-64_FreeBSD_dev',
+                                artifacts: 'build/Testing/**/*.xml, build/libbrigadier++_x86-64_GNULinux_dev.a',
                                 allowEmptyArchive: true,
                                 fingerprint: true
                             )
