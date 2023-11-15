@@ -20,16 +20,23 @@ int Reader::readInt()
 
     while (this->canRead() && this->isAllowedNumberPart(this->peek()))
         this->skip();
-    if (this->canRead() && !this->isAllowedNumberPart(this->peek()) && !this->isSpace(this->peek()))
+    if (this->canRead() && !this->isAllowedNumberPart(this->peek()) && !this->isSpace(this->peek())) {
+        setCursor(start);
         throw brigadier::CommandSyntaxException(makeExpectedValueMessage(this, "int"));
-    auto numberRepr = getString().substr(start, getCursor());
-    if (numberRepr.empty())
+    }
+    auto numberRepr = getString().substr(start, getCursor() - start);
+    if (numberRepr.empty()) {
+        setCursor(start);
         throw brigadier::CommandSyntaxException(makeExpectedValueMessage(this, "int"));
+    }
+    this->skipWhitespace();
     try {
         return std::stoi(numberRepr);
     } catch (const std::out_of_range &) {
+        setCursor(start);
         throw brigadier::CommandSyntaxException(makeInvalidValueMessage(this, numberRepr, "int"));
     } catch (const std::invalid_argument &) {
+        setCursor(start);
         throw brigadier::CommandSyntaxException(makeInvalidValueMessage(this, numberRepr, "int"));
     }
 }
@@ -40,16 +47,23 @@ long Reader::readLong()
 
     while (this->canRead() && this->isAllowedNumberPart(this->peek()))
         this->skip();
-    if (this->canRead() && !this->isAllowedNumberPart(this->peek()) && !this->isSpace(this->peek()))
+    if (this->canRead() && !this->isAllowedNumberPart(this->peek()) && !this->isSpace(this->peek())) {
+        setCursor(start);
         throw brigadier::CommandSyntaxException(makeExpectedValueMessage(this, "long"));
-    auto numberRepr = getString().substr(start, getCursor());
-    if (numberRepr.empty())
+    }
+    auto numberRepr = getString().substr(start, getCursor() - start);
+    if (numberRepr.empty()) {
+        setCursor(start);
         throw brigadier::CommandSyntaxException(makeExpectedValueMessage(this, "long"));
+    }
+    this->skipWhitespace();
     try {
         return std::stol(numberRepr);
     } catch (const std::out_of_range &) {
+        setCursor(start);
         throw brigadier::CommandSyntaxException(makeInvalidValueMessage(this, numberRepr, "long"));
     } catch (const std::invalid_argument &) {
+        setCursor(start);
         throw brigadier::CommandSyntaxException(makeInvalidValueMessage(this, numberRepr, "long"));
     }
 }
@@ -60,16 +74,23 @@ double Reader::readDouble()
 
     while (this->canRead() && this->isAllowedNumberPart(this->peek()))
         this->skip();
-    if (this->canRead() && !this->isAllowedNumberPart(this->peek()) && !this->isSpace(this->peek()))
+    if (this->canRead() && !this->isAllowedNumberPart(this->peek()) && !this->isSpace(this->peek())) {
+        setCursor(start);
         throw brigadier::CommandSyntaxException(makeExpectedValueMessage(this, "double"));
-    auto numberRepr = getString().substr(start, getCursor());
-    if (numberRepr.empty())
+    }
+    auto numberRepr = getString().substr(start, getCursor() - start);
+    if (numberRepr.empty()) {
+        setCursor(start);
         throw brigadier::CommandSyntaxException(makeExpectedValueMessage(this, "double"));
+    }
+    this->skipWhitespace();
     try {
         return std::stod(numberRepr);
     } catch (const std::out_of_range &) {
+        setCursor(start);
         throw brigadier::CommandSyntaxException(makeInvalidValueMessage(this, numberRepr, "double"));
     } catch (const std::invalid_argument &) {
+        setCursor(start);
         throw brigadier::CommandSyntaxException(makeInvalidValueMessage(this, numberRepr, "double"));
     }
 }
@@ -80,16 +101,23 @@ float Reader::readFloat()
 
     while (this->canRead() && this->isAllowedNumberPart(this->peek()))
         this->skip();
-    if (this->canRead() && !this->isAllowedNumberPart(this->peek()) && !this->isSpace(this->peek()))
+    if (this->canRead() && !this->isAllowedNumberPart(this->peek()) && !this->isSpace(this->peek())) {
+        setCursor(start);
         throw brigadier::CommandSyntaxException(makeExpectedValueMessage(this, "float"));
-    auto numberRepr = getString().substr(start, getCursor());
-    if (numberRepr.empty())
+    }
+    auto numberRepr = getString().substr(start, getCursor() - start);
+    if (numberRepr.empty()) {
+        setCursor(start);
         throw brigadier::CommandSyntaxException(makeExpectedValueMessage(this, "float"));
+    }
+    this->skipWhitespace();
     try {
         return std::stof(numberRepr);
     } catch (const std::out_of_range &) {
+        setCursor(start);
         throw brigadier::CommandSyntaxException(makeInvalidValueMessage(this, numberRepr, "float"));
     } catch (const std::invalid_argument &) {
+        setCursor(start);
         throw brigadier::CommandSyntaxException(makeInvalidValueMessage(this, numberRepr, "float"));
     }
 }
@@ -107,9 +135,12 @@ std::string Reader::readUnquotedString()
 
     while (this->canRead() && this->isAllowedInUnquotedString(this->peek()))
         this->skip();
-    auto stringRepr = getString().substr(start, getCursor());
-    if (stringRepr.empty())
+    auto stringRepr = getString().substr(start, getCursor() - start);
+    this->skipWhitespace();
+    if (stringRepr.empty()) {
+        setCursor(start);
         throw brigadier::CommandSyntaxException(makeExpectedValueMessage(this, "string"));
+    }
     return stringRepr;
 }
 
@@ -132,8 +163,10 @@ std::string Reader::readStringUntil(char terminator)
         auto c = this->peek();
         if (c == '\\') {
             this->skip();
-            if (!this->canRead())
+            if (!this->canRead()) {
+                setCursor(start);
                 throw brigadier::CommandSyntaxException(makeExpectedValueMessage(this, "escape sequence"));
+            }
             this->skip();
         } else if (c == terminator) {
             this->skip();
@@ -141,5 +174,7 @@ std::string Reader::readStringUntil(char terminator)
         }
         this->skip();
     }
-    return this->getString().substr(start, this->getCursor());
+    auto end = this->getCursor();
+    this->skipWhitespace();
+    return this->getString().substr(start, end - start);
 }

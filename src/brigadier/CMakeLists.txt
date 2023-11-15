@@ -1,12 +1,15 @@
-target_sources(Brigadier
-    PRIVATE
-        # CommandNode.cpp
+target_sources(${PROJECT_NAME}
     PUBLIC
-        CommandNode.hpp
         Argument.hpp
-        Command.hpp
-        Dispatcher.hpp
+        CommandNode.hpp
+        CommandNodeBuilder.hpp
         exceptions.hpp
+        options.hpp
+        Parser.hpp
+        Registry.hpp
+        TypeHolder.hpp
+        parser.hpp
+        reader.hpp
 )
 
 add_subdirectory(reader)

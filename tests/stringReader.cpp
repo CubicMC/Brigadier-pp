@@ -1,11 +1,12 @@
 #include <brigadier/exceptions.hpp>
-#include <rapidcheck/Random.h>
-#include <rapidcheck/gen/Arbitrary.h>
 #include <brigadier/reader/StringReader.hpp>
 #include <gtest/gtest.h>
 #include <limits>
+#include <rapidcheck/Random.h>
+#include <rapidcheck/gen/Arbitrary.h>
 #include <rapidcheck/gtest.h>
 #include <string>
+#include <variant>
 
 class ReaderDefaults : public testing::Test {
 protected:
@@ -82,8 +83,8 @@ TEST_F(ReaderString, testReadString)
             FAIL() << "Reader did not advance";
         reader.skipWhitespace();
         lastCursor = reader.getCursor();
-        EXPECT_EQ(reader.readString(), str.substr(lastCursor, str.substr(lastCursor).find(' ')));
-        EXPECT_EQ(reader.getRead(), str.substr(0, str.substr(lastCursor).find(' ')));
+        EXPECT_EQ(reader.readString(), str.substr(lastCursor, str.find(' ', lastCursor) - lastCursor));
+        EXPECT_EQ(reader.getRead(), str.substr(0, str.find(' ', lastCursor) + reader.canRead()));
     }
     EXPECT_EQ(reader.getRead(), str);
     EXPECT_EQ(reader.getRemaining(), "");

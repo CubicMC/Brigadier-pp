@@ -14,6 +14,7 @@ public:
     virtual size_t getCursor() const = 0;
     virtual std::string getRead() const = 0;
     virtual std::string getRemaining() const = 0;
+    virtual void setCursor(size_t cursor) = 0;
 
     virtual bool canRead(size_t length) const = 0;
     virtual bool canRead() const = 0;

@@ -1,4 +1,4 @@
-target_sources(Brigadier
+target_sources(${PROJECT_NAME}
     PRIVATE
         Reader.cpp
     PUBLIC

@@ -1,3 +1,3 @@
-target_sources(Brigadier PUBLIC brigadier.hpp)
+target_sources(${PROJECT_NAME} PUBLIC brigadier.hpp)
 
 add_subdirectory(brigadier)

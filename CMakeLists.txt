@@ -3,13 +3,13 @@ cmake_minimum_required(VERSION 3.15)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-project(Brigadier VERSION 0.0.1 LANGUAGES CXX)
+project(Brigadier++ VERSION 0.0.1 LANGUAGES CXX)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 include(FetchContent)
 
-if(GTEST) # if the flag GTEST is true
+if(BUILD_TESTING)
     FetchContent_Declare(
         googletest
         GIT_REPOSITORY https://github.com/google/googletest.git
@@ -33,6 +33,7 @@ if(GTEST) # if the flag GTEST is true
     set(ENABLE_TESTING ON CACHE BOOL "" FORCE)
     enable_testing()
     include(GoogleTest)
+    add_subdirectory(tests)
 endif()
 
 FetchContent_Declare(
@@ -42,12 +43,12 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(fmt)
 
-add_library(Brigadier)
-add_library(Brigadier::Brigadier ALIAS Brigadier)
+add_library(Brigadier++)
+add_library(Brigadier++::Brigadier++ ALIAS Brigadier++)
+target_compile_options(Brigadier++ PUBLIC -DENABLE_TESTING -ggdb3)
 
-target_link_libraries(Brigadier PUBLIC fmt::fmt)
+target_link_libraries(Brigadier++ PUBLIC fmt::fmt)
 
-target_include_directories(Brigadier PUBLIC src)
+target_include_directories(Brigadier++ PUBLIC src)
 
 add_subdirectory(src)
-add_subdirectory(tests)

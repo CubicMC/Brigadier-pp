@@ -1,6 +1,7 @@
 add_executable(tests
     stringReader.cpp
-    Dispatcher.cpp
+    # Dispatcher.cpp
+    test.cpp
 )
 
 # target_compile_definitions(parser_test PRIVATE
@@ -8,7 +9,7 @@ add_executable(tests
 # )
 
 target_link_libraries(tests PRIVATE
-    Brigadier::Brigadier
+    ${PROJECT_NAME}::${PROJECT_NAME}
     GTest::gtest_main
     GTest::gmock
     rapidcheck
@@ -18,3 +19,4 @@ target_link_libraries(tests PRIVATE
 target_link_directories(tests PRIVATE ${CMAKE_BINARY_DIR}/lib)
 
 gtest_discover_tests(tests)
+add_test(tests)

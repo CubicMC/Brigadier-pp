@@ -19,6 +19,7 @@ public:
     size_t getCursor() const override { return _cursor; }
     std::string getRead() const override { return _string.substr(0, _cursor); }
     std::string getRemaining() const override { return _string.substr(_cursor); }
+    void setCursor(size_t cursor) override { _cursor = cursor; }
 
     bool canRead(size_t length) const override { return _cursor + length < _string.size(); }
     bool canRead() const override { return _cursor < _string.size(); }
