@@ -23,7 +23,7 @@ pipeline {
                                 cd build
                                 CC=gcc CXX=g++ cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=1 ..
                                 make -j4
-                                cp libbrigadier++.a libbrigadier++_x86-64_GNULinux_dev.a
+                                cp libBrigadier++.a libBrigadier++_x86-64_GNULinux_dev.a
                                 '''
                             }
                         }
@@ -39,7 +39,7 @@ pipeline {
                     post {
                         always {
                             archiveArtifacts (
-                                artifacts: 'build/Testing/**/*.xml, build/libbrigadier++_x86-64_GNULinux_dev.a',
+                                artifacts: 'build/Testing/**/*.xml, build/libBrigadier++_x86-64_GNULinux_dev.a',
                                 allowEmptyArchive: true,
                                 fingerprint: true
                             )
@@ -79,7 +79,7 @@ pipeline {
                                 cd build
                                 CC=gcc CXX=g++ cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=1 ..
                                 make -j4
-                                cp libbrigadier++.a libbrigadier++_x86-64_GNULinux_dev.a
+                                cp libBrigadier++.a libBrigadier++_x86-64_GNULinux_dev.a
                                 '''
                             }
                         }
@@ -95,7 +95,7 @@ pipeline {
                     post {
                         always {
                             archiveArtifacts (
-                                artifacts: 'build/Testing/**/*.xml, build/libbrigadier++_x86-64_GNULinux_dev.a',
+                                artifacts: 'build/Testing/**/*.xml, build/libBrigadier++_x86-64_GNULinux_dev.a',
                                 allowEmptyArchive: true,
                                 fingerprint: true
                             )
