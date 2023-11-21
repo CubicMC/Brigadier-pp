@@ -25,9 +25,6 @@ Here is the list of dependencies required to build CubicServer:
  - pkgconf (Cmake package shenanigans)
  - git (Cloning deps)
 
-To install those dependencies you can see an example for Fedora 38 from our
-[build image](https://github.com/CubicMC/cubic-runners/blob/master/Dockerfile)
-
 ## Contributing
 
 Any contributions are welcome, if you don't know what to do you can take a look
