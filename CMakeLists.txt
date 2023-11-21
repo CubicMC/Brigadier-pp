@@ -3,7 +3,10 @@ cmake_minimum_required(VERSION 3.15)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-project(Brigadier++ VERSION 0.0.1 LANGUAGES CXX)
+project(Brigadier++
+    VERSION 0.0.1
+    LANGUAGES CXX
+)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
