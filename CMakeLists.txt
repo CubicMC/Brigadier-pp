@@ -10,9 +10,11 @@ project(Brigadier++
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+option(ENABLE_TESTING "Enable testing" OFF)
+
 include(FetchContent)
 
-if(BUILD_TESTING)
+if(ENABLE_TESTING)
     FetchContent_Declare(
         googletest
         GIT_REPOSITORY https://github.com/google/googletest.git
@@ -33,7 +35,6 @@ if(BUILD_TESTING)
         googletest
     )
 
-    set(ENABLE_TESTING ON CACHE BOOL "" FORCE)
     enable_testing()
     include(GoogleTest)
     add_subdirectory(tests)
@@ -48,10 +49,20 @@ FetchContent_MakeAvailable(fmt)
 
 add_library(${PROJECT_NAME})
 add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
-target_compile_options(${PROJECT_NAME} PUBLIC -DENABLE_TESTING -ggdb3)
+
+if (CMAKE_BUILD_TYPE MATCHES Debug)
+    target_compile_options(${PROJECT_NAME} PUBLIC -DENABLE_TESTING -ggdb3)
+endif()
 
 target_link_libraries(${PROJECT_NAME} PUBLIC fmt::fmt)
-
 target_include_directories(${PROJECT_NAME} PUBLIC src)
 
 add_subdirectory(src)
+
+install(TARGETS ${PROJECT_NAME}
+    EXPORT ${PROJECT_NAME}Targets
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+    RUNTIME DESTINATION bin
+    INCLUDES DESTINATION include
+)
