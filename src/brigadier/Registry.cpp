@@ -29,7 +29,7 @@ void brigadier::Registry::parse(TypeHolder &source, Reader &reader) const
     reader.skipWhitespace();
     auto cmd = reader.readString();
     for (auto &node : _nodes) {
-        if (node->getName() == cmd || FIND(node->getAliases(), cmd) != node->getAliases().end()) {
+        if (node->getName() == cmd || std::find(node->getAliases().begin(), node->getAliases().end(), cmd) != node->getAliases().end()) {
             node->parse(source, reader);
             return;
         }
@@ -50,7 +50,7 @@ std::vector<std::string> brigadier::Registry::listSuggestions(TypeHolder &holder
 {
     std::string name = reader.readString();
     for (auto &node : _nodes) {
-        if (node->getName() == name || FIND(node->getAliases(), name) != node->getAliases().end())
+        if (node->getName() == name || std::find(node->getAliases().begin(), node->getAliases().end(), name) != node->getAliases().end())
             return node->listSuggestions(holder, reader);
     }
     return {};

@@ -11,7 +11,6 @@
 #include <brigadier/Parser.hpp>
 #include <brigadier/TypeHolder.hpp>
 #include <brigadier/exceptions.hpp>
-#include <brigadier/utils.hpp>
 
 namespace brigadier {
 
@@ -42,7 +41,7 @@ public:
         try {
             auto entry = reader.readString();
             for (auto &child : _children) {
-                if (child->getName() == entry || FIND(child->getAliases(), entry) != child->getAliases().end()) {
+                if (child->getName() == entry || std::find(child->getAliases().begin(), child->getAliases().end(), entry) != child->getAliases().end()) {
                     child->parse(source, reader);
                     return;
                 }
@@ -76,7 +75,7 @@ public:
             for (auto &child : _children) {
                 if (child->getName() == entry)
                     return true;
-                if (FIND(child->getAliases(), entry) != child->getAliases().end())
+                if (std::find(child->getAliases().begin(), child->getAliases().end(), entry) != child->getAliases().end())
                     return true;
                 if (child->isValidInput(reader))
                     return true;
@@ -93,7 +92,7 @@ public:
     {
         auto name = reader.readString();
         for (auto &child : _children) {
-            if (child->getName() == name || FIND(child->getAliases(), name) != child->getAliases().end())
+            if (child->getName() == name || std::find(child->getAliases().begin(), child->getAliases().end(), name) != child->getAliases().end())
                 return child->listSuggestions(holder, reader);
         }
         try {
