@@ -3,6 +3,13 @@
 #include <string>
 
 namespace brigadier {
+/**
+ * @brief A reader, used to read a string and parse it
+ *
+ * @see StringReader for an implementation
+ *
+ * it is used by the parser to read the command string
+ */
 class Reader {
 public:
     Reader() = default;

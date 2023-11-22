@@ -78,7 +78,7 @@ TEST(UseTest, useTest)
 
     // clang-format off
     dispatcher.add(CommandNodeBuilder("scoreboard")
-        .withPermission([](TypeHolder source) {
+        .withPermission([](brigadier::TypeHolder source) {
             if (source.is<Player>()) {
                 if (source.getAs<Player>()->isOp())
                     return true;
@@ -91,7 +91,7 @@ TEST(UseTest, useTest)
                 .expectArg<EntitySelectorParser>("player")
                 .expectArg<brigadier::StringParser>("scoreboard")
                 .expectArg<brigadier::NumberParser<int>>("score")
-                .execute([](TypeHolder source, EntitySelector entities, std::string scoreboard, int score) {
+                .execute([](brigadier::TypeHolder source, EntitySelector entities, std::string scoreboard, int score) {
 
                     for (auto &entity : entities.getEntities()) {
                         std::cout << "calling addScore" << std::endl;
@@ -103,7 +103,7 @@ TEST(UseTest, useTest)
                 .expectArg<EntitySelectorParser>("player")
                 .expectArg<brigadier::StringParser>("scoreboard")
                 .expectArg<brigadier::NumberParser<int>>("score")
-                .execute([](TypeHolder source, EntitySelector entities, std::string scoreboard, int score) {
+                .execute([](brigadier::TypeHolder source, EntitySelector entities, std::string scoreboard, int score) {
                     for (auto &entity : entities.getEntities()) {
                         std::cout << "calling removeScore" << std::endl;
                         entity->removeScore(scoreboard, score);

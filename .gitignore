@@ -31,6 +31,9 @@
 *.out
 *.app
 
+# Generated documentation
+docs/html
+
 .vscode
 cmake-build-debug
 cmake-build-release
@@ -44,3 +47,4 @@ build*
 *.kdev4
 world
 world2
+

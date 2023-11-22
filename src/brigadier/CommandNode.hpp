@@ -14,10 +14,33 @@
 
 namespace brigadier {
 
+/**
+ * @brief Construct a new Command Node object
+ *
+ * This is the base class for all command nodes. It is used to parse the command and execute the callback.
+ *
+ * @warning Prefer using the `brigadier::CommandNodeBuilder` class to create command nodes.
+ *
+ * @tparam Parsers A list of parsers that will be used to parse the arguments
+ */
 template<typename... Parsers>
     requires(is_parser<Parsers> && ...)
 class CommandNode : public ICommandNode {
 public:
+    /**
+     * @brief Construct a new Command Node object
+     *
+     * @private
+     *
+     * @param name
+     * @param description
+     * @param arguments
+     * @param children
+     * @param aliases
+     * @param permissionPredicate
+     * @param callback
+     * @param suggestionProvider
+     */
     CommandNode(
         const std::string_view &name, const std::string_view &description, const std::vector<Argument> &arguments, const std::vector<std::shared_ptr<ICommandNode>> &children,
         const std::vector<std::string> &aliases, const std::function<bool(const TypeHolder)> &permissionPredicate,
@@ -35,6 +58,15 @@ public:
     }
 
 public:
+    /**
+     * @brief Parse and execute the command
+     *
+     * @throw CommandSyntaxException If the command is invalid
+     * @throw ParserException If a parser fails
+     *
+     * @param source The source of the command
+     * @param reader The reader to parse the command from
+     */
     void parse(TypeHolder &source, Reader &reader) const override
     {
         auto start = reader.getCursor();
@@ -59,14 +91,41 @@ public:
         }
     }
 
+    /**
+     * @brief Get the Children object
+     *
+     * @return const std::vector<std::shared_ptr<ICommandNode>>&
+     */
     const std::vector<std::shared_ptr<ICommandNode>> &getChildren() const override { return _children; }
 
+    /**
+     * @brief Get the Name object
+     *
+     * @return std::string_view
+     */
     std::string_view getName() const override { return _name; }
 
+    /**
+     * @brief Get the Usage object
+     *
+     * @return std::string_view
+     */
     std::string_view getUsage() const override { return _description; }
 
+    /**
+     * @brief Execute the command predicate to check if source can use this command
+     *
+     * @param source
+     * @return bool
+     */
     bool canUse(const TypeHolder &source) override { return _permissionPredicate(source); }
 
+    /**
+     * @brief Check if the input is valid
+     *
+     * @param reader
+     * @return bool
+     */
     bool isValidInput(Reader &reader) const override
     {
         auto start = reader.getCursor();
@@ -88,6 +147,13 @@ public:
         }
     }
 
+    /**
+     * @brief List all the suggestions for the input
+     *
+     * @param holder
+     * @param reader
+     * @return std::vector<std::string>
+     */
     std::vector<std::string> listSuggestions(TypeHolder &holder, Reader &reader) const override
     {
         auto name = reader.readString();
@@ -103,7 +169,21 @@ public:
             return {};
         }
     }
+
+    /**
+     * @brief Get the Aliases object
+     *
+     * @return const std::vector<std::string>&
+     */
     const std::vector<std::string> &getAliases() const override { return _aliases; }
+
+private:
+    /**
+     * @brief Construct a new Command Node object
+     *
+     * @private
+     */
+    CommandNode() = delete;
 
 private:
     const std::string_view _name;

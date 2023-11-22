@@ -14,6 +14,7 @@ namespace brigadier {
  * For your class to be a parser, it must inherit from this class and must comply with the conditions of the @see is_parser concept
  * Basically, it must have a static method named parse that takes a Reader as parameter and returns an object of type T
  * example:
+ *
  * @code
  * struct MyParser : public Parser {
  *    using type = int;

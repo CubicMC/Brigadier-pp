@@ -6,9 +6,17 @@
 #include <vector>
 
 namespace brigadier {
-
+/**
+ * @brief A registry of command nodes
+ */
 class Registry : public ICommandNode {
 public:
+    /**
+     * @brief Construct a new Registry object
+     *
+     * @param node
+     * @return Registry&
+     */
     Registry &add(const std::shared_ptr<ICommandNode> &node);
 
     void parse(const std::string &command) const;
