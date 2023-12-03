@@ -1,5 +1,6 @@
 #pragma once
 
+#include "brigadier/exceptions.hpp"
 #include <brigadier/Parser.hpp>
 #include <brigadier/reader/Reader.hpp>
 #include <string>
@@ -14,7 +15,14 @@ struct StringParser : public Parser {
 struct GreedyStringParser : public Parser {
     using type = std::string;
 
-    static std::string parse(Reader &reader) { return reader.getRemaining(); }
+    static std::string parse(Reader &reader)
+    {
+        auto str = reader.getRemaining();
+        if (str.empty())
+            throw CommandSyntaxException("Expected string", reader);
+        reader.setCursor(reader.getTotalLength());
+        return str;
+    }
 };
 
 } // namespace brigadier

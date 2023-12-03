@@ -30,8 +30,6 @@ public:
 
     virtual void skip() = 0;
 
-    virtual bool isAllowedNumberPart(char c) const { return c >= '0' && c <= '9' || c == '.' || c == '-'; }
-
     virtual bool isQuotedStringStart(char c) const { return c == '"' || c == '\''; }
 
     virtual bool isAllowedInUnquotedString(char c) const

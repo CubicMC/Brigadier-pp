@@ -51,6 +51,7 @@ public:
     constexpr bool canUse(const TypeHolder &source) override { return true; }
     [[noreturn]] const std::vector<std::string> &getAliases() const override { throw std::runtime_error("Not implemented"); }
 
+    bool isValidInput(const std::string &input) const;
     bool isValidInput(Reader &input) const override;
     [[nodiscard]] std::vector<std::string> listSuggestions(TypeHolder &holder, Reader &reader) const override;
 

@@ -48,4 +48,9 @@ DEFINE_EXCEPTION(ParserException);
 
 DEFINE_EXCEPTION_FROM(ArgumentException, ParserException);
 
+//* TypeHolder
+DEFINE_EXCEPTION(TypeHolderException);
+
+DEFINE_EXCEPTION_FROM(InvalidTypeException, TypeHolderException);
+
 } // namespace brigadier

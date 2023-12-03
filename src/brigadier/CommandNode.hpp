@@ -43,8 +43,8 @@ public:
      */
     CommandNode(
         const std::string_view &name, const std::string_view &description, const std::vector<Argument> &arguments, const std::vector<std::shared_ptr<ICommandNode>> &children,
-        const std::vector<std::string> &aliases, const std::function<bool(const TypeHolder)> &permissionPredicate,
-        const std::function<void(TypeHolder, typename Parsers::type...)> &callback, const std::function<std::vector<std::string>(TypeHolder)> &suggestionProvider
+        const std::vector<std::string> &aliases, const std::function<bool(const TypeHolder &)> &permissionPredicate,
+        const std::function<void(TypeHolder &, typename Parsers::type...)> &callback, const std::function<std::vector<std::string>(TypeHolder &)> &suggestionProvider
     ):
         _name(name),
         _description(description),
@@ -71,14 +71,16 @@ public:
     {
         auto start = reader.getCursor();
         try {
-            auto entry = reader.readString();
-            for (auto &child : _children) {
-                if (child->getName() == entry || std::find(child->getAliases().begin(), child->getAliases().end(), entry) != child->getAliases().end()) {
-                    child->parse(source, reader);
-                    return;
+            if (reader.canRead()) {
+                auto entry = reader.readString();
+                for (auto &child : _children) {
+                    if (child->getName() == entry || std::find(child->getAliases().begin(), child->getAliases().end(), entry) != child->getAliases().end()) {
+                        child->parse(source, reader);
+                        return;
+                    }
                 }
+                reader.setCursor(start);
             }
-            reader.setCursor(start);
             if (_callback == nullptr)
                 throw CommandSyntaxException("Invalid command", reader);
             _callback(source, Parsers::parse(reader)...);
@@ -129,22 +131,33 @@ public:
     bool isValidInput(Reader &reader) const override
     {
         auto start = reader.getCursor();
+        std::cout << "isValidInput " << reader.getRemaining() << " " << std::boolalpha << reader.canRead() << std::endl;
         try {
-            auto entry = reader.readString();
-            for (auto &child : _children) {
-                if (child->getName() == entry)
-                    return true;
-                if (std::find(child->getAliases().begin(), child->getAliases().end(), entry) != child->getAliases().end())
-                    return true;
-                if (child->isValidInput(reader))
-                    return true;
+            if (reader.canRead()) {
+                auto entry = reader.readString();
+                for (auto &child : _children) {
+                    if (child->getName() == entry)
+                        return true;
+                    if (std::find(child->getAliases().begin(), child->getAliases().end(), entry) != child->getAliases().end())
+                        return true;
+                    if (child->isValidInput(reader))
+                        return true;
+                }
+                reader.setCursor(start);
             }
-            reader.setCursor(start);
+            if (_callback == nullptr)
+                return false;
             (Parsers::parse(reader), ...);
-            return !reader.canRead() || reader.peek() == ' ';
+            reader.skipWhitespace();
+            std::cout << reader.getRemainingLength() << std::endl;
+            std::cout << reader.canRead() << std::endl;
+            return reader.getRemainingLength() == 0;
         } catch (CommandSyntaxException &e) {
-            return false;
+        } catch (ReaderException &e) {
+        } catch (ParserException &e) {
         }
+        reader.setCursor(start);
+        return false;
     }
 
     /**
@@ -191,8 +204,8 @@ private:
     const std::vector<Argument> _arguments;
     const std::vector<std::string> _aliases;
     const std::vector<std::shared_ptr<ICommandNode>> _children;
-    const std::function<bool(const TypeHolder)> _permissionPredicate;
-    const std::function<void(TypeHolder, typename Parsers::type...)> _callback;
-    const std::function<std::vector<std::string>(TypeHolder)> _suggestionProvider;
+    const std::function<bool(const TypeHolder &)> _permissionPredicate;
+    const std::function<void(TypeHolder &, typename Parsers::type...)> _callback;
+    const std::function<std::vector<std::string>(TypeHolder &)> _suggestionProvider;
 };
 } // namespace brigadier

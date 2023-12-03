@@ -1,7 +1,8 @@
 add_executable(tests
     stringReader.cpp
-    # Dispatcher.cpp
-    test.cpp
+    registry.cpp
+    typeHolder.cpp
+    parser.cpp
 )
 
 # target_compile_definitions(parser_test PRIVATE

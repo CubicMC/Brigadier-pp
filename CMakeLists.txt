@@ -11,6 +11,15 @@ project(Brigadier++
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 option(ENABLE_TESTING "Enable testing" OFF)
+option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
+
+
+# Hide things by default for shared libraries
+if(BUILD_SHARED_LIBS)
+    set(CMAKE_C_VISIBILITY_PRESET hidden)
+    set(CMAKE_CXX_VISIBILITY_PRESET hidden)
+    set(CMAKE_VISIBILITY_INLINES_HIDDEN YES)
+endif()
 
 include(FetchContent)
 

@@ -35,6 +35,13 @@ struct Parser {
 template<typename T>
 concept is_parser = std::is_base_of<Parser, T>::value && std::is_base_of<std::false_type, std::is_same<typename T::type, void>>::value && requires(Reader &reader) {
     // clang-format off
+
+    /**
+     * @brief Parse an object of type T from the reader
+     *
+     * @param reader
+     * @return typename T::type
+     */
     { T::parse(reader) } -> std::same_as<typename T::type>;
     // clang-format on
 };

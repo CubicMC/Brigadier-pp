@@ -102,7 +102,7 @@ public:
      * @param callback
      * @return CommandNodeBuilder&
      */
-    CommandNodeBuilder &execute(std::function<void(TypeHolder, typename _Parsers::type...)> callback)
+    CommandNodeBuilder &execute(std::function<void(TypeHolder &, typename _Parsers::type...)> callback)
     {
         _callback = std::move(callback);
         return *this;
@@ -126,7 +126,7 @@ public:
      * @param permissionPredicate
      * @return CommandNodeBuilder&
      */
-    CommandNodeBuilder &withPermission(std::function<bool(const TypeHolder)> permissionPredicate)
+    CommandNodeBuilder &withPermission(std::function<bool(const TypeHolder &)> permissionPredicate)
     {
         _permissionPredicate = std::move(permissionPredicate);
         return *this;
@@ -150,7 +150,7 @@ public:
      * @param suggestionProvider
      * @return CommandNodeBuilder&
      */
-    CommandNodeBuilder &suggestionBuilder(std::function<std::vector<std::string>(TypeHolder)> suggestionProvider)
+    CommandNodeBuilder &suggestionBuilder(std::function<std::vector<std::string>(TypeHolder &)> suggestionProvider)
     {
         _suggestionProvider = std::move(suggestionProvider);
         return *this;
@@ -203,8 +203,8 @@ private:
     std::vector<Argument> _arguments;
     std::vector<std::shared_ptr<ICommandNode>> _children;
     std::vector<std::string> _aliases;
-    std::function<bool(const TypeHolder)> _permissionPredicate;
-    std::function<void(TypeHolder, typename _Parsers::type...)> _callback;
-    std::function<std::vector<std::string>(TypeHolder)> _suggestionProvider;
+    std::function<bool(const TypeHolder &)> _permissionPredicate;
+    std::function<void(TypeHolder &, typename _Parsers::type...)> _callback;
+    std::function<std::vector<std::string>(TypeHolder &)> _suggestionProvider;
 };
 } // namespace brigadier
