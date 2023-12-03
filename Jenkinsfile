@@ -10,21 +10,26 @@ pipeline {
             parallel {
                 stage('GNU/Linux') {
                     agent {
-                        label "brigadier++-gnu"
+                        label "cubic-gnu"
                     }
                     options {
-                        timeout(time: 20, unit: 'MINUTES')
+                        timeout(time: 30, unit: 'MINUTES')
                     }
                     stages {
                         stage ('Build GNU/Linux') {
                             steps {
-                                sh '''
-                                mkdir -pv build
-                                cd build
-                                CC=gcc CXX=g++ cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=1 ..
-                                make -j4
-                                cp libBrigadier++.a libBrigadier++_x86-64_GNULinux_dev.a
-                                '''
+                                cache(defaultBranch: 'master', caches: [arbitraryFileCache(path: 'build', cacheName: 'gnu-master-brigadier-cache')]) {
+                                    sh '''
+                                    mkdir -pv build
+                                    cd build
+                                    find . -name CMakeCache.txt -delete
+                                    rm -rf _deps
+                                    cmake -DCMAKE_BUILD_TYPE=Release -DENABLE_TESTING=1 -DCMAKE_CXX_COMPILER_LAUNCHER=ccache ..
+                                    mkdir -pv cache
+                                    CCACHE_DIR=$(pwd)/cache make -j6
+                                    cp libBrigadier++.a libBrigadier++_x86-64_GNULinux_dev.a
+                                    '''
+                                }
                             }
                         }
                         stage ('Test GNU/Linux') {
@@ -39,7 +44,7 @@ pipeline {
                     post {
                         always {
                             archiveArtifacts (
-                                artifacts: 'build/Testing/**/*.xml, build/libBrigadier++_x86-64_GNULinux_dev.a',
+                                artifacts: 'build/Testing/**/*.xml, libBrigadier++_x86-64_GNULinux_dev.a',
                                 allowEmptyArchive: true,
                                 fingerprint: true
                             )
@@ -64,26 +69,31 @@ pipeline {
                         }
                     }
                 }
-                stage('FreeBSD') {
+                stage('MUSL/Linux') {
                     agent {
-                        label "cubic-freebsd"
+                        label "cubic-musl"
                     }
                     options {
-                        timeout(time: 1, unit: 'HOURS')
+                        timeout(time: 30, unit: 'MINUTES')
                     }
                     stages {
-                        stage ('Build FreeBSD') {
+                        stage ('Build MUSL/Linux') {
                             steps {
-                                sh '''
-                                mkdir -pv build
-                                cd build
-                                CC=gcc CXX=g++ cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=1 ..
-                                make -j4
-                                cp libBrigadier++.a libBrigadier++_x86-64_GNULinux_dev.a
-                                '''
+                                cache(defaultBranch: 'master', caches: [arbitraryFileCache(path: 'build', cacheName: 'musl-master-brigadier-cache')]) {
+                                    sh '''
+                                    mkdir -pv build
+                                    cd build
+                                    find . -name CMakeCache.txt -delete
+                                    rm -rf _deps
+                                    cmake -DCMAKE_BUILD_TYPE=Release -DENABLE_TESTING=1 -DCMAKE_CXX_COMPILER_LAUNCHER=ccache ..
+                                    mkdir -pv cache
+                                    CCACHE_DIR=$(pwd)/cache make -j6
+                                    cp libBrigadier++.a libBrigadier++_x86-64_MUSLLinux_dev.a
+                                    '''
+                                }
                             }
                         }
-                        stage ('Test FreeBSD') {
+                        stage ('Test MUSL/Linux') {
                             steps {
                                 sh '''
                                 cd build
@@ -95,7 +105,7 @@ pipeline {
                     post {
                         always {
                             archiveArtifacts (
-                                artifacts: 'build/Testing/**/*.xml, build/libBrigadier++_x86-64_GNULinux_dev.a',
+                                artifacts: 'build/Testing/**/*.xml, build/libBrigadier++_x86-64_MUSLLinux_dev.a',
                                 allowEmptyArchive: true,
                                 fingerprint: true
                             )
